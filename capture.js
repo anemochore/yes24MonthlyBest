@@ -1,9 +1,19 @@
 (() => {
-  let hrefs = [], titles = [], publishers = [], dates = [], prices = [];
+  let nos = [], hrefs = [], titles = [], publishers = [], dates = [], prices = [];
   let thisNode;
 
 
-  // ¡÷º“, ¡¶∏Ò
+  // ÏàúÏúÑ
+  const noWithDot = document.evaluate("//td[@class='num']", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE);
+
+  thisNode = noWithDot.iterateNext();
+  while(thisNode) {
+    nos.push(thisNode.innerText.replace(".", ""));
+    thisNode = noWithDot.iterateNext();
+  }
+
+
+  // Ï£ºÏÜå, Ï†úÎ™©
   const titlesWithHref = document.evaluate("//td[@class='goodsTxtInfo']/p[1]/a[1]", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE);
 
   thisNode = titlesWithHref.iterateNext();
@@ -14,7 +24,7 @@
   }
 
 
-  // √‚∆«ªÁ, √‚∞£¿œ
+  // Ï∂úÌåêÏÇ¨, Ï∂úÍ∞ÑÏùº
   const authorEtcs = document.evaluate("//td[@class='goodsTxtInfo']/div[@class='aupu']", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE);
 
   thisNode = authorEtcs.iterateNext();
@@ -25,24 +35,24 @@
   }
 
 
-  // ∞°∞›
+  // Í∞ÄÍ≤©
   const pricesWithArrow = document.evaluate("//td[@class='goodsTxtInfo']/p[2]/text()[1]", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE);
 
   thisNode = pricesWithArrow.iterateNext();
   while(thisNode) {
-    prices.push(parseInt(thisNode.wholeText.replace("ø¯ °Ê", "").replace(",", "")));
+    prices.push(thisNode.wholeText.replace("Ïõê ‚Üí", "").replace(",", ""));
     thisNode = pricesWithArrow.iterateNext();
   }
 
 
-  // √‚∑¬
+  // Ï∂úÎ†•
   let output = "<table>";
-  //output += "<thead><tr><td>¡÷º“</td><td>¡¶∏Ò</td><td></td><td>√‚∆«ªÁ</td><td>√‚∞£¿œ</td><td></td><td>∞°∞›</td></tr></thead>";
+  //output += "<thead><tr><td>Ï£ºÏÜå</td><td>Ï†úÎ™©</td><td></td><td>Ï∂úÌåêÏÇ¨</td><td>Ï∂úÍ∞ÑÏùº</td><td></td><td>Í∞ÄÍ≤©</td></tr></thead>";
 
   output += "<tbody>";
   for(let i = 0; i < hrefs.length; i++) {
     output += "<tr>";
-    output += "<td>" + (i+1) + "</td>";
+    output += "<td>" + nos[i] + "</td>";
     output += "<td>" + hrefs[i] + "</td>";
     output += "<td>" + titles[i] + "</td>";
     output += "<td></td>";
@@ -54,6 +64,6 @@
   }
   output += "</tbody></table>";
 
-  myWindow = window.open('', '', 'width=1280, height=576');
+  myWindow = window.open('', '', 'width=1366, height=576');
   myWindow.document.write(output);
 })();
